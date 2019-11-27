@@ -6,7 +6,7 @@ module.exports = {
   entry: path.resolve(__dirname, 'src/index.js'),
   mode: 'development',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'src/index.js'),
     filename: 'bundle.js',
   },
 
@@ -32,11 +32,11 @@ module.exports = {
   resolve: { extensions: ['*', '.js', '.jsx']},
 
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    //publicPath: '/dist/',
-    // proxy: {
-    //   '/api': 'http://localhost:3000',
-    // }
+    //contentBase: path.join(__dirname, '/build/'),
+    publicPath: '/build/',
+    proxy: {
+      '/api': 'http://localhost:3000',
+    }, 
     port: 3000,
     hot: true,
   },

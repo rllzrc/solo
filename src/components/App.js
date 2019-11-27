@@ -4,7 +4,7 @@ import React from 'react';
 const App = () => {
   return (
     <div>
-      <h1>hello swooho</h1>
+      <h1>Money Please!!!</h1>
     </div>
   )
 }
