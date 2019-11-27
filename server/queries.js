@@ -53,7 +53,7 @@ const getItemsById = (req, res) => {
     if (err) {
       console.log(err.stack);
     } else {
-      console.log(items.rows[0]);
+      console.log(items.rows);
     }
     res.status(200).json(items.rows);
   });
@@ -110,11 +110,11 @@ const updateItem = (req, res) => {
 const deleteItem = (req, res) => {
   const id = parseInt(req.params.id);
 
-  client.query('DELETE FROM items WHERE id = $1', [id], (err, res) => {
+  pool.query('DELETE FROM items WHERE id = $1 RETURNING *', [id], (err, items) => {
     if (err) {
       console.log(err.stack);
     }
-    res.status(200).send(`Qorl deleted with ID: ${id}`);
+    res.status(200).send(items.rows);
   });
 };
 
@@ -127,4 +127,5 @@ module.exports = {
   createItem,
   updateItem,
   deleteItem,
+  pool,
 }

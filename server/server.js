@@ -17,7 +17,7 @@ const bodyParser = require('body-parser');
 // * require it in and assign it to a variable
 
 const db = require('./queries.js')
-
+const fileController = require('./fileController.js');
 // *** for each endpoint set the http req method, endpoint URL path and relevant func
 
 app.use(express.json());
@@ -27,6 +27,7 @@ app.get('/items/:id', db.getItemsById);
 app.post('/items', db.createItem);
 app.put('/items/:id', db.updateItem);
 app.delete('/items/:id', db.deleteItem);
+
 
 // // * create a queries file to setup the config of your PostgreSQL connection
 // const {Pool} = require('pg');
@@ -48,8 +49,8 @@ app.use(express.static('src'));
 // * this is the general landing page of your site
 // * when a get root endpoint is received, respond with the index.html file
 
-app.get('/', (req, res) =>{
-  res.sendFile(path.join(__dirname, '../index.html'));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '/index.html'));
 });
 
 // // * hard coded to test just to make sure it is listening properly
@@ -63,6 +64,26 @@ app.get('/', (req, res) =>{
 //   res.send(req.body);
 // });
 
+// * create a catch-all route handler for unknown reqs
+// * this is a golden rule since you always want to respond to a req
+// * even if its not processing anything
+
+app.all('*', (req, res) => res.status(404).send('Whoopsies~ Page not found!'));
+
+
+// * GLOBAL error handler for middleware funcs
+// * define error handling middleware
+
+app.use((err, req, res, next) => {
+  const defaultErr = {
+    log: 'Express error handler caught unknown middleware error',
+    status: 400,
+    message: { err: 'An error occured' },
+  }
+  const errorObj = Object.assign(defaultErr, err.message);
+  console.log(errorObj.log);
+  res.status(errorObj.status).json(errorObj.messag);
+});
 
 // * to setup the app to listen to the port we've set
 app.listen(port, () => {
