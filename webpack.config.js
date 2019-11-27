@@ -4,9 +4,14 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.js'),
-  mode: 'development',
+  mode: process.env.NODE_ENV,
+  // output: {
+  //   path: path.resolve(__dirname, 'src/index.js'),
+  //   filename: 'bundle.js',
+  // },
+
   output: {
-    path: path.resolve(__dirname, 'src/index.js'),
+    path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
   },
 
@@ -33,9 +38,10 @@ module.exports = {
 
   devServer: {
     //contentBase: path.join(__dirname, '/build/'),
-    publicPath: '/build/',
+    publicPath: '/',
     proxy: {
-      '/api': 'http://localhost:3000',
+      context: () => true,
+      target: 'http://localhost:3000',
     }, 
     port: 8080,
     hot: true,

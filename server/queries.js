@@ -90,13 +90,16 @@ const createItem = (req, res) => {
 // * same call over and over will produce the same result
 
 const updateItem = (req, res) => {
+  console.log('we in dis update dude!');
   const id = parseInt(req.params.id);
+  console.log('dis dat id in your updateItem b:', req.params.id);
   const { name, price, location } = req.body;
 
-  pool.query('UPDATE items SET name = $1, price = $2, location = $3 WHERE id = $4', [name, price, location, id], (err, items) => {
+  pool.query('UPDATE items SET name = $1, price = $2, location = $3 WHERE id = $4 RETURNING *', [name, price, location, id], (err, items) => {
     if (err) {
       console.log(err.stack);
     }
+    console.log('yo check dat update doe:', items);
     res.status(200).json(items.rows);
   });
 };
